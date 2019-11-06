@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Metric-Imperial Converter</title>
+    
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="./public/style.css">
+  </head>
+  <body>
+    
+    <div class="container">
+         <header>
+      <h3>Metric-Imperial Converter</h3>
+            </header>
+      <main>
+       
+      <section>
+        <ul style="float:left;">
+          <li >
+          gallons to liters
+            </li>
+        <li>
+          pounds to kilograms
+        </li>
+        <li>
+          miles to kilometers
+        </li>
+        </ul>
+      </section>
+      <div>
+         <section>
+        <form id="convertForm">
+          <div >
+            <input type="text" class="validate" name="input" placeholder="3mi" required>
+          </div>
+          <div >
+            <button  type="submit" name="action">Convert
+            </button>
+          </div>
+        </form>
+           </section>
+      </div>
+           <br>
+        <section>
+      <div class="row center row-result">
+        
+          <div class="preloader-wrapper small active hide">
+            <div class="spinner-layer spinner-green-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div>
+              <div class="gap-patch">
+                <div class="circle"></div>
+              </div>
+              <div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+        
+        <div id="result" class="col s12 flow-text teal-text">Result will appear here!</div>
+                  
+
+   
+      </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"
+            integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+            crossorigin="anonymous"></script>
+    <script>
+      var jq = $.noConflict();
+      jq(function() {
+        jq('#convertForm').submit(function(event) {
+          event.preventDefault();
+          jq('#result').text('');          
+          jq('.preloader-wrapper').removeClass('hide');
+          jq.ajax({
+            url: '/api/convert',
+            type: 'get',
+            data: jq('#convertForm').serialize(),
+            success: function(data) {
+              jq('.preloader-wrapper').addClass('hide');
+              jq('#result').text(data.string);
+              jq('#convertForm').trigger('reset');              
+            },
+            error: function(xhr, textStatus, error){
+              jq('.preloader-wrapper').addClass('hide');
+              jq('#result').text(xhr.responseJSON.error);              
+            }
+          });
+        });
+      });
+   </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  </body>
+</html>
